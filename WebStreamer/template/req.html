@@ -1,4 +1,3 @@
-<!--(c) CodeXBots-->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -24,29 +23,29 @@
         margin: 0;
         padding: 0;
     }
-	#player-container {
+    #player-container {
         margin: 1px;
     }
-	.container {
+    .container {
         overflow: hidden;
         *zoom: 1;
         margin: 0 1px;
-	margin-bottom: 20px;
+        margin-bottom: 20px;
     }
-	.set-container {
-	padding: 15px;
+    .set-container {
+        padding: 15px;
     }
-	.containerbox {
+    .containerbox {
         overflow: hidden;
         *zoom: 1;
-	margin-bottom: 70px;
+        margin-bottom: 70px;
     }
-	.mainupdates {
-	overflow: hidden;
+    .mainupdates {
+        overflow: hidden;
         *zoom: 1;
-	margin-bottom: 60px;
+        margin-bottom: 60px;
     }
-    
+
     #info-box {
         border: 1px solid #140cf0;
         border-radius: 10px;
@@ -59,7 +58,7 @@
         word-wrap: break-word;
     }
 
-	#button-container1 {
+    #button-container1 {
         display: flex;
         align-items: center;
         flex-wrap: wrap;
@@ -115,8 +114,6 @@
     #button-container2 button:hover {
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
     }
-    
-
 </style>
 
 </head>
@@ -126,21 +123,21 @@
     <div class="container">
     <header>
         <marquee bgcolor="#808080">
-<div class="toogle"></div>
+        <div class="toogle"></div>
         <div id="file-name">
             %s
         </div>
-</marquee>
+        </marquee>
     </header>
         <tag src="%s" class="player"></tag>
     </div>
 <div class="containerbox"> 
 	<div style="margin-bottom: 5px; margin-top: 10px">𝐒𝐭𝐫𝐞𝐚𝐦 𝐎𝐩𝐭𝐢𝐨𝐧𝐬 :</div>
         <div id="button-container1">
-            <button id="vlc-btn" onclick="playOnline()">
+            <button id="vlc-btn" onclick="playOnline('vlc')">
                 <img src="https://i.ibb.co/GtnGhBV/videolan-vlc-logo-icon-170258.png" alt="vlc_logo" width="110px" height="40px"/>
             </button>
-            <button id="mx-btn" onclick="playOnlineMx()"><img src="https://i.ibb.co/djV3Fn8/mxlogo.png" alt="mx_logo" width="120px">
+            <button id="mx-btn" onclick="playOnline('mx')"><img src="https://i.ibb.co/djV3Fn8/mxlogo.png" alt="mx_logo" width="120px">
             </button>
         </div>
         <div style="margin-bottom: 5px; margin-top: 5px">
@@ -180,144 +177,52 @@
 	</div>
     </div>
 </div>	
-                  
-    
-    <script src="https://cdn.plyr.io/3.6.12/plyr.js"></script>
-	<script>
-        const controls = [
-              'play-large',
-              'rewind',
-              'play', 
-              'fast-forward', 
-              'progress', 
-              'current-time',
-              'duration',
-              'settings',
-              'fullscreen'
-            ];
-	</script>
-	<div>
-		<script>
-    const currentUrl = window.location.href;
-    const finalUrl = currentUrl.replace("/watch/", "/");
 
-    function playOnline() {
-        const finalLinkUrl = finalUrl;
-        const vlcUrl = `vlc://${finalLinkUrl}`;
-        window.location.href = vlcUrl;
+<script src="https://cdn.plyr.io/3.6.12/plyr.js"></script>
+<script>
+    function playOnline(player) {
+        const finalLinkUrl = window.location.href.replace("/watch/", "/");
+        let playerUrl = '';
+
+        if (player === 'vlc') {
+            playerUrl = `vlc://${finalLinkUrl}`;
+        } else if (player === 'mx') {
+            playerUrl = `intent:${finalLinkUrl}#Intent;package=com.mxtech.videoplayer.ad;end`;
+        }
+
+        if (playerUrl) {
+            window.location.href = playerUrl;
+        }
     }
 
-    function playOnlineMx() {
-        const finalLinkUrl = finalUrl;
-        const mxUrl = `intent:${finalLinkUrl}#Intent;package=com.mxtech.videoplayer.ad;end`;
-        window.location.href = mxUrl;
-    }
-    
     function playOnlinesp() {
-        const finalLinkUrl = finalUrl;
+        const finalLinkUrl = window.location.href.replace("/watch/", "/");
         const spUrl = `intent:${finalLinkUrl}#Intent;action=com.young.simple.player.playback_online;package=com.young.simple.player;end`;
         window.location.href = spUrl;
     }
-    
+
     function playOnlinepi() {
-        const finalLinkUrl = finalUrl;
-        const piUrl = `playit://playerv2/video?url=${finalLinkUrl}&amp;title={{file_name}}`;
+        const finalLinkUrl = window.location.href.replace("/watch/", "/");
+        const piUrl = `playit://playerv2/video?url=${finalLinkUrl}&title={{file_name}}`;
         window.location.href = piUrl;
     }
-			
+
     function download() {
-        const finalLinkUrl = finalUrl;
+        const finalLinkUrl = window.location.href.replace("/watch/", "/");
         window.location.href = finalLinkUrl;
     }
 
-    function openTgBot() {
-        const createLinkUrl = "https://telegram.dog/";
-        window.open(createLinkUrl, "_blank");
-    }
+    document.addEventListener('DOMContentLoaded', () => {
+        const player = Plyr.setup('.player', { controls });
+    });
+</script>
 
-    function openModalTG() {
-        const modal = document.getElementById("myModal");
-        modal.style.display = "block";
-
-        const words = [
-            "Received File request...✅",
-            "Processing your request...⌛",
-            "Generating your link...🔗",
-            "Sending link to you...🚀",
-            "Redirecting To Telegram...😉"
-        ];
-
-        let index = 0;
-        const timerElement = document.getElementById("timer");
-        timerElement.innerText = words[index];
-
-        const timer = setInterval(() => {
-            index++;
-            if (index < words.length) {
-                timerElement.innerText = words[index];
-            } else {
-                clearInterval(timer);
-                TGre();
-                modal.style.display = "none";
-            }
-        }, 1000);
-    }
-
-    function TGre() {
-        const tglink = "";
-        window.location.href = tglink;
-    }
-
-    function openModal() {
-        const modal = document.getElementById("myModal");
-        modal.style.display = "block";
-
-        const words = [
-            "Received Download request...✅",
-            "Processing your request...⌛",
-            "Generating your link...🔗",
-            "Sending link to you...🚀",
-            "Download has started...😉"
-        ];
-
-        let index = 0;
-        const timerElement = document.getElementById("timer");
-        timerElement.innerText = words[index];
-
-        const timer = setInterval(() => {
-            index++;
-            if (index < words.length) {
-                timerElement.innerText = words[index];
-            } else {
-                clearInterval(timer);
-                download();
-                modal.style.display = "none";
-            }
-        }, 1000);
-    }
-
-    function download() {
-        const finalLinkUrl = finalUrl;
-        window.location.href = finalLinkUrl;
-    }
-	
-        document.addEventListener('DOMContentLoaded', () => {
-            const player = Plyr.setup('.player', { controls });
-        });
-
-        const body = document.querySelector('body');
-        const footer = document.querySelector('footer');
-        const toogle = document.querySelector('.toogle');
-        toogle.onclick = () => {
-            body.classList.toggle('dark')
-            footer.classList.toggle('dark')
-        }
-    </script>
-	</div>
 <footer>
-        <p style="font-size: 12px; color:#7b89a3;padding-top: 30px ;margin:0px 10px; border-top: 1px solid #c2cee3;">
-      This website only provides a service that helps you to play your videos online without downloading. It does not offer storage or dissemination functions. You can report videos that contain issues such as copyright infringement, explicit content, 18+, violence, etc. <a href="https://telegram.me/mladminbot" style="color: red"><b>Report</b></a>
-      <p style="text-align:center">&copy; Copyright 2024<br>All Rights Reserved</p>
+    <p style="font-size: 12px; color:#7b89a3;padding-top: 30px ;margin:0px 10px; border-top: 1px solid #c2cee3;">
+        This website only provides a service that helps you to play your videos online without downloading. It does not offer storage or dissemination functions. You can report videos that contain issues such as copyright infringement, explicit content, 18+, violence, etc. <a href="https://telegram.me/mladminbot" style="color: red"><b>Report</b></a>
+    </p>
+    <p style="text-align:center">&copy; Copyright 2024<br>All Rights Reserved</p>
 </footer>
+
 </body>
 </html>
